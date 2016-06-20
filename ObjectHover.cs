@@ -11,7 +11,6 @@ public class ObjectHover : MonoBehaviour {
 	void Awake () {
 		rb = GetComponent<Rigidbody>();
 		rb.freezeRotation = true;
-
 	}
 	
 	// Update is called once per frame
@@ -26,7 +25,5 @@ public class ObjectHover : MonoBehaviour {
 			Vector3 appliedHoverForce = Vector3.up * proportionalHeight * hoverForce;
 			rb.AddForce(appliedHoverForce, ForceMode.Acceleration);
 		}
-
-	
 	}
 }
