@@ -11,8 +11,7 @@ public class PlayerController : MonoBehaviour {
     public const string objSpeedDec = "Dec_Speed_Cube";
     public const string objScaleinc = "Scale_Inc";
     public const string objScaleDec = "Scale_Dc";
-    public const string objMirrorRight = "MirrorRight";
-    public const string objMirrorLeft = "MirrorLeft";
+    public const string Mirror = "Mirror";
     public const string walls = "Wall";
     public string objCollision;
     public float hoverForce = 65f;
@@ -25,14 +24,19 @@ public class PlayerController : MonoBehaviour {
     private float moveSpeed = 45f;// move speed at ... per sec
     private Vector3 directionLeft = new Vector3(0, -90, 0);
     private Vector3 directionRight = new Vector3(0, 90, 0);
+    private Vector3 forceDirection;
     private Rigidbody rb;
+    private Vector3 rotated_right = new Vector3(0,90,0);
+    private bool rotated_left;
+    private bool lessThanY = false;
+    private bool greaterThanY = false;
+    private bool objRotation false;
 
     void Awake()
     {
         rb = GetComponent<Rigidbody>();
         rb.freezeRotation = true;
         //rb.useGravity = false;
-        
     }
 
     // Update is called once per frame
@@ -59,19 +63,12 @@ public class PlayerController : MonoBehaviour {
     {
         switch (col.gameObject.name)
         {
-            case objMirrorRight:
+            case Mirror:
+                    changeDir(col);
                     transform.Rotate(directionRight);
                     //transform.Translate(new Vector3(speed,0,0));
                     //Movement(new Vector3(10,0,0));
                 break;
-
-            case objMirrorLeft:
-                    transform.Rotate(directionLeft);
-                    //transform.Translate(new Vector3(speed,0,0));
-                    //Movement(new Vector3(10,0,0));
-
-                break;
-
             case objSpeedIncr:
                 moveSpeed = 100;
                 Destroy(col.gameObject);
@@ -112,6 +109,58 @@ public class PlayerController : MonoBehaviour {
         return direction;
     }
 
+    void changeDir(Collision col)
+    {
+        //call checkRotateCollider 
+        checkRotateCollider(col);
+        //check return of collider rotation
+        checkRotateCollider(col);
+        // rotate right if collider is 45 degrees or more
+        //call checkRotateObject
+        if (greaterThanY)
+        {
+            col.transform.rotation.eulerAngles.y = 90;
+        }
+        // rotate left if collider is 45 degrees or less
+        else if (lessThanY)
+        {
+            col.transform.rotation.eulerAngles.y = -90;
+        }
+
+
+        // decrease by 180 if game object is 90 or greater and mirror is reflecting left
+        // increase by 180 if game object is less than 90 and mirror is reflecting right
+        //Change direction 
+    }
+
+    bool checkRotateCollider(Collision col)
+    {
+        // Check if col object's rotation is 45 degrees or less.
+        if(col.transform.localEulerAngles.y >= 90)
+        {
+            return greaterThanY = true;
+        }
+        else if(col.transform.localEulerAngles.y <= -90)
+        {
+            return lessThanY = true;
+        }
+        return false;
+    }
+
+    bool checkRotateObject()
+    {
+        //if game object rotation y is greater than 90 then return y
+        if (gameObject.transform.rotation.eulerAngles.y < 90)
+        {
+
+        }
+        //if game object rotation y if less than 90 then return y
+        else if (gameObject.transform.rotation.eulerAngles.y <= -90)
+        {
+
+        }
+        return objRotation = true;
+    }
     void FixedUpdate() {
 
         //hoverCode
